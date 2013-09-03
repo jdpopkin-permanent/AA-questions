@@ -15,6 +15,8 @@ class QuestionsDatabase < SQLite3::Database
     self.type_translation = true
   end
 end
+#rm questions.db
+#cat import_db.sql | sqlite3 questions.db
 
 # new_user = User.new({"fname" => "Joe", "lname" => "Biden"})
 # new_user.create
@@ -32,9 +34,13 @@ q_lunch = Question.find_by_author_id(colin.id).first
 
 reply = Reply.find_by_question_id(q_lunch.id).first
 reply2 = Reply.find_by_user_id(colin.id).first
-p reply
-p reply2
-p reply.author
-p reply.question
-p reply2.parent_reply
-p reply.child_replies
+
+# p QuestionFollower.followers_for_question_id(q_lunch.id)
+# p QuestionFollower.followed_questions_for_user_id(jackson.id)
+# p q_lunch.followers
+# p jackson.followed_questions
+# p Question.most_followed(2)
+
+#p QuestionLike.likers_for_question_id(q_lunch.id)
+#p QuestionLike.num_likes_for_question_id(q_lunch.id)
+p QuestionLike.liked_questions_for_user_id(colin.id)

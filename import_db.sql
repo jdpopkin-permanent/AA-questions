@@ -48,12 +48,12 @@ VALUES
 INSERT INTO
   questions(title, body, user_id)
 VALUES
-  ('Lunch',"What's for lunch?", 1);
+  ('Lunch',"What's for lunch?", 1), ("SQL", "What is up with SQL?", 2);
 
 INSERT INTO
   question_followers(user_id, question_id)
 VALUES
-  (2, 1);
+  (2, 1), (1, 1), (2, 2);
 
 INSERT INTO
   replies(reply, question_id, user_id)

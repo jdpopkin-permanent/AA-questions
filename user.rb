@@ -74,4 +74,9 @@ class User
 
     results.map { |result| Reply.new(result) }
   end
+
+  def followed_questions
+    QuestionFollower.followed_questions_for_user_id(id)
+  end
+
 end
