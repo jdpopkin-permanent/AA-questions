@@ -1,4 +1,4 @@
-class Question
+class Question < Database
   def self.all
     results = QuestionsDatabase.instance.execute("SELECT * FROM questions")
     results.map { |result| Question.new(result) }
@@ -9,24 +9,10 @@ class Question
 
   def initialize(options = {})
     @id = options["id"]
+    @database = "questions"
     @title = options["title"]
     @body = options["body"]
     @user_id = options["user_id"]
-  end
-
-  def save
-    if self.id.nil?
-      self.create
-    else
-      QuestionsDatabase.instance.execute(<<-SQL, title, body, user_id, self.id)
-        UPDATE
-          questions
-        SET
-          title = ?, body = ?2, user_id = ?3
-        WHERE
-          id = ?4
-      SQL
-    end
   end
 
   def self.find_by_id(search_id)

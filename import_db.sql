@@ -40,6 +40,29 @@ CREATE TABLE question_likes(
   ---likes INTEGER
 );
 
+CREATE TABLE tags(
+  id INTEGER PRIMARY KEY,
+  tag_name VARCHAR(255)
+);
+
+CREATE TABLE question_tags(
+  id INTEGER PRIMARY KEY,
+  tag_id INTEGER NOT NULL,
+  question_id INTEGER NOT NULL,
+  FOREIGN KEY (tag_id) REFERENCES tags(id),
+  FOREIGN KEY (question_id) REFERENCES questions(id)
+);
+
+INSERT INTO
+  tags (tag_name)
+VALUES
+  ('SQL'), ('Lunch');
+
+INSERT INTO
+  question_tags(tag_id, question_id)
+VALUES
+  (2, 1), (1, 2), (2, 2);
+
 INSERT INTO
   users (fname, lname)
 VALUES

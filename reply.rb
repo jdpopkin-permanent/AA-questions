@@ -1,4 +1,4 @@
-class Reply
+class Reply < Database
   def self.all
     results = QuestionsDatabase.instance.execute("SELECT * FROM replies")
     results.map{ |result| Reply.new(result) }
@@ -9,25 +9,11 @@ class Reply
 
   def initialize(options = {})
     @id = options["id"]
+    @database = "replies"
     @reply = options["reply"]
     @question_id = options["question_id"]
     @reply_id = options["reply_id"]
     @user_id = options["user_id"]
-  end
-
-  def save
-    if self.id.nil?
-      self.create
-    else
-      QuestionsDatabase.instance.execute(<<-SQL, reply, question_id, reply_id, user_id, self.id)
-        UPDATE
-          replies
-        SET
-          reply = ?, question_id = ?2, reply_id = ?3, user_id = ?4
-        WHERE
-          id = ?5
-      SQL
-    end
   end
 
   def self.find_by_id(search_id)
