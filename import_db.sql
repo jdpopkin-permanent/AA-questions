@@ -61,6 +61,11 @@ VALUES
   ("I don't know", 1, 2);
 
 INSERT INTO
+  replies(reply, question_id, reply_id, user_id)
+VALUES
+  ("Really", 1, 1, 1);
+
+INSERT INTO
   question_likes(user_id, question_id)
 VALUES
   (1, 1);
