@@ -24,6 +24,7 @@ end
 # call user funcs
 colin = User.find_by_name("Colin", "MacKenzie").first
 jackson = User.find_by_name("Jackson", "Popkin").first
+joe = User.find_by_name("Joe", "Biden").first
 # p colin.authored_questions
 # p jackson.authored_replies
 
@@ -43,4 +44,17 @@ reply2 = Reply.find_by_user_id(colin.id).first
 
 #p QuestionLike.likers_for_question_id(q_lunch.id)
 #p QuestionLike.num_likes_for_question_id(q_lunch.id)
-p QuestionLike.liked_questions_for_user_id(colin.id)
+#p QuestionLike.liked_questions_for_user_id(colin.id)
+
+# p q_lunch.likers
+# p q_lunch.num_likes
+# p colin.liked_questions
+
+# p Question.most_liked(2)
+# p colin.average_karma
+
+joe.fname = "Joseph"
+joe.save
+new_joe = User.find_by_name("Joseph", "Biden").first
+p new_joe
+

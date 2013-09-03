@@ -83,6 +83,6 @@ class QuestionFollower
       LIMIT ?
     SQL
 
-    results.map { |result| Question.new(result) } # .shift(n)
+    results.map { |result| Question.new(result) }
   end
 end

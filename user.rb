@@ -25,6 +25,21 @@ class User
     @id = QuestionsDatabase.instance.last_insert_row_id
   end
 
+  def save
+    if self.id.nil?
+      self.create
+    else
+      QuestionsDatabase.instance.execute(<<-SQL, fname, lname, self.id)
+        UPDATE
+          users
+        SET
+          fname = ?, lname = ?2
+        WHERE
+          id = ?3
+      SQL
+    end
+  end
+
   def self.find_by_id(search_id)
 
     results = QuestionsDatabase.instance.execute(<<-SQL, search_id)
@@ -77,6 +92,32 @@ class User
 
   def followed_questions
     QuestionFollower.followed_questions_for_user_id(id)
+  end
+
+  def liked_questions
+    QuestionLike.liked_questions_for_user_id(id)
+  end
+
+  def average_karma
+    results = QuestionsDatabase.instance.execute(<<-SQL, self.id)
+      SELECT
+        COUNT(question_likes.user_id) / CAST(COUNT(DISTINCT questions.id) AS FLOAT)
+      FROM
+        questions
+      LEFT OUTER JOIN
+        question_likes
+      ON
+        question_likes.question_id = questions.id
+      JOIN
+        users
+      ON
+        questions.user_id = users.id
+      WHERE
+        questions.user_id = ?
+    SQL
+
+    results[0].values[0]
+
   end
 
 end

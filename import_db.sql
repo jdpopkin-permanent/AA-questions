@@ -43,12 +43,12 @@ CREATE TABLE question_likes(
 INSERT INTO
   users (fname, lname)
 VALUES
-  ('Colin', 'MacKenzie'), ('Jackson','Popkin');
+  ('Colin', 'MacKenzie'), ('Jackson','Popkin'), ('Joe', 'Biden');
 
 INSERT INTO
   questions(title, body, user_id)
 VALUES
-  ('Lunch',"What's for lunch?", 1), ("SQL", "What is up with SQL?", 2);
+  ('Lunch',"What's for lunch?", 1), ("SQL", "What is up with SQL?", 1);
 
 INSERT INTO
   question_followers(user_id, question_id)
@@ -68,4 +68,4 @@ VALUES
 INSERT INTO
   question_likes(user_id, question_id)
 VALUES
-  (1, 1);
+  (1, 1), (2, 1), (3, 1);
