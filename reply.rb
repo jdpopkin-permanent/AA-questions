@@ -4,7 +4,8 @@ class Reply
     results.map{ |result| Reply.new(result) }
   end
 
-  attr_accessor :id, :reply, :question_id, :reply_id, :user_id
+  attr_accessor :reply, :question_id, :reply_id, :user_id
+  attr_reader :id
 
   def initialize(options = {})
     @id = options["id"]
@@ -14,17 +15,19 @@ class Reply
     @user_id = options["user_id"]
   end
 
-  def create
-    raise "already saved!" unless self.id.nil?
-
-    QuestionsDatabase.instance.execute(<<-SQL, reply, question_id, reply_id, user_id)
-      INSERT INTO
-        replies (reply, question_id, reply_id, user_id)
-      VALUES
-        (?, ?2, ?3, ?4)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
+  def save
+    if self.id.nil?
+      self.create
+    else
+      QuestionsDatabase.instance.execute(<<-SQL, reply, question_id, reply_id, user_id, self.id)
+        UPDATE
+          replies
+        SET
+          reply = ?, question_id = ?2, reply_id = ?3, user_id = ?4
+        WHERE
+          id = ?5
+      SQL
+    end
   end
 
   def self.find_by_id(search_id)
@@ -114,6 +117,20 @@ class Reply
     SQL
 
     results.map { |result| Reply.new(result) }
+  end
+
+  private
+  def create
+    raise "already saved!" unless self.id.nil?
+
+    QuestionsDatabase.instance.execute(<<-SQL, reply, question_id, reply_id, user_id)
+      INSERT INTO
+        replies (reply, question_id, reply_id, user_id)
+      VALUES
+        (?, ?2, ?3, ?4)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
   end
 
 end

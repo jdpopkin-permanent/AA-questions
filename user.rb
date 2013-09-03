@@ -4,7 +4,8 @@ class User
     results.map{ |result| Users.new(result) }
   end
 
-  attr_accessor :id, :fname, :lname
+  attr_accessor :fname, :lname
+  attr_reader :id
 
   def initialize(options = {})
     @id = options["id"]
@@ -12,7 +13,7 @@ class User
     @lname = options["lname"]
   end
 
-  def create
+  def create #make private
     raise "already saved!" unless self.id.nil?
 
     QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
@@ -98,7 +99,7 @@ class User
     QuestionLike.liked_questions_for_user_id(id)
   end
 
-  def average_karma
+  def average_karma #group by USER
     results = QuestionsDatabase.instance.execute(<<-SQL, self.id)
       SELECT
         COUNT(question_likes.user_id) / CAST(COUNT(DISTINCT questions.id) AS FLOAT)
@@ -117,7 +118,6 @@ class User
     SQL
 
     results[0].values[0]
-
   end
 
 end

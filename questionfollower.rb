@@ -4,25 +4,13 @@ class QuestionFollower
     results.map{ |result| QuestionFollower.new(result) }
   end
 
-  attr_accessor :id, :user_id, :question_id
+  attr_accessor :user_id, :question_id
+  attr_reader :id
 
   def initialize(options = {})
     @id = options["id"]
     @user_id = options["user_id"]
     @question_id = options["question_id"]
-  end
-
-  def create
-    raise "already saved!" unless self.id.nil?
-
-    QuestionsDatabase.instance.execute(<<-SQL, user_id, question_id)
-      INSERT INTO
-        question_followers (user_id, question_id)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
   end
 
   def self.find_by_id(search_id)
@@ -43,7 +31,9 @@ class QuestionFollower
       SELECT
         users.*
       FROM
-        question_followers JOIN users
+        question_followers
+      JOIN
+        users
       ON
         users.id = user_id
       WHERE
@@ -73,7 +63,9 @@ class QuestionFollower
       SELECT
         questions.*
       FROM
-        question_followers JOIN questions
+        question_followers
+      JOIN
+        questions
       ON
         questions.id = question_id
       GROUP BY
@@ -84,5 +76,20 @@ class QuestionFollower
     SQL
 
     results.map { |result| Question.new(result) }
+  end
+
+  private
+
+  def create
+    raise "already saved!" unless self.id.nil?
+
+    QuestionsDatabase.instance.execute(<<-SQL, user_id, question_id)
+      INSERT INTO
+        question_followers (user_id, question_id)
+      VALUES
+        (?, ?)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
   end
 end
