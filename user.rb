@@ -73,7 +73,7 @@ class User < Database
     QuestionLike.liked_questions_for_user_id(id)
   end
 
-  def average_karma #group by USER
+  def average_karma
     results = QuestionsDatabase.instance.execute(<<-SQL, self.id)
       SELECT
         COUNT(question_likes.user_id) / CAST(COUNT(DISTINCT questions.id) AS FLOAT)
@@ -93,19 +93,4 @@ class User < Database
 
     results[0].values[0]
   end
-
-  private
-  def create
-    raise "already saved!" unless self.id.nil?
-
-    QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
-      INSERT INTO
-        users (fname, lname)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
 end

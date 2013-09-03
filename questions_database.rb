@@ -22,7 +22,7 @@ end
 
 colin = User.find_by_name("Colin", "MacKenzie").first
 jackson = User.find_by_name("Jackson", "Popkin").first
-joe = User.find_by_name("Joe", "Biden").first
+joe = User.find_by_name("Joseph", "Biden").first
 
 q_lunch = Question.find_by_author_id(colin.id).first
 
@@ -32,6 +32,9 @@ reply2 = Reply.find_by_user_id(colin.id).first
 temp_tag = Tag.find_by_id(2)
 temp_tag.most_popular
 #most_popular
-joe.fname = "Joseph"
-joe.save
-p User.find_by_name("Joseph", "Biden")
+# joe.fname = "Joseph"
+# joe.save
+# User.find_by_name("Joseph", "Biden")
+nic_cage = User.new( {"fname" => "Nicolas", "lname" => "Cage"} )
+nic_cage.save
+p User.find_by_name("Nicolas", "Cage")

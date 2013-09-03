@@ -1,4 +1,4 @@
-class Tag
+class Tag < Database
   def self.all
     results = QuestionsDatabase.instance.execute("SELECT * FROM tags")
     results.map{ |result| Tag.new(result) }

@@ -104,19 +104,4 @@ class Reply < Database
 
     results.map { |result| Reply.new(result) }
   end
-
-  private
-  def create
-    raise "already saved!" unless self.id.nil?
-
-    QuestionsDatabase.instance.execute(<<-SQL, reply, question_id, reply_id, user_id)
-      INSERT INTO
-        replies (reply, question_id, reply_id, user_id)
-      VALUES
-        (?, ?2, ?3, ?4)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
 end

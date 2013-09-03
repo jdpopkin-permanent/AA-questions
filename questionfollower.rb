@@ -1,4 +1,4 @@
-class QuestionFollower
+class QuestionFollower < Database
   def self.all
     results = QuestionsDatabase.instance.execute("SELECT * FROM question_followers")
     results.map{ |result| QuestionFollower.new(result) }
@@ -78,18 +78,4 @@ class QuestionFollower
     results.map { |result| Question.new(result) }
   end
 
-  private
-
-  def create
-    raise "already saved!" unless self.id.nil?
-
-    QuestionsDatabase.instance.execute(<<-SQL, user_id, question_id)
-      INSERT INTO
-        question_followers (user_id, question_id)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
 end

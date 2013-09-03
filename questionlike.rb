@@ -1,4 +1,4 @@
-class QuestionLike
+class QuestionLike < Database
   def self.all
     results = QuestionsDatabase.instance.execute("SELECT * FROM question_likes")
     results.map{ |result| QuestionLike.new(result) }
@@ -93,19 +93,4 @@ class QuestionLike
 
     results.map { |result| Question.new(result) }
   end
-
-  private
-  def create
-    raise "already saved!" unless self.id.nil?
-
-    QuestionsDatabase.instance.execute(<<-SQL, user_id, question_id)
-      INSERT INTO
-        question_likes (user_id, question_id)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
 end
